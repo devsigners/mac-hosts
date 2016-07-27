@@ -1,0 +1,262 @@
+$topZoneHeight: 32px;
+$leftZoneWidth: 160px;
+
+$activeColor: #ef7979;
+$selectedColor: rgb(116, 179, 226);
+
+.container {
+  height: 100vh;
+}
+.dragable {
+  -webkit-app-region: drag;
+  background: transparent;
+  -webkit-user-select: none;
+  cursor: auto;
+}
+.leftZone {
+  position: absolute;
+  width: $leftZoneWidth;
+  left: 0;
+  top: 0;
+  bottom: 0;
+}
+.rightZone {
+  position: absolute;
+  left: $leftZoneWidth;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background-color: #fff;
+  box-shadow: -1px 0 1px rgba(0, 0, 0, 0.3);
+}
+
+.logoZone {
+  padding: 32px 0 24px;
+  .title {
+    margin: 0;
+    font-size: 20px;
+    font-weight: lighter;
+    line-height: 1;
+    text-align: center;
+    color: $activeColor;
+    letter-spacing: 2px;
+  }
+  .subtitle {
+    margin: 0;
+    padding: 2px 0 0;
+    font-size: 12px;
+    font-weight: lighter;
+    line-height: 1;
+    text-align: center;
+    color: #aaa;
+  }
+}
+.menuZone {
+  overflow: auto;
+  .extraCtrlZone {
+    position: absolute;
+    padding: 8px 16px;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    font-size: 14px;
+  }
+  .ctrlButton {
+    cursor: pointer;
+    color: #333;
+    :global(.fa) {
+      color: #999;
+    }
+  }
+}
+.menuList {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  .item {
+    position: relative;
+    align-self: stretch;
+    margin: 0;
+    padding: 6px 16px 6px 24px;
+    font-size: 16px;
+    font-weight: lighter;
+    color: #333;
+    text-align: left;
+    transition: all 0.3s ease;
+    &:hover {
+      background-color: #ddd;
+      .ctrlIcons {
+        visibility: visible;
+      }
+    }
+    &.selected {
+      background-color: $selectedColor;
+      color: #fff;
+    }
+  }
+  .activeIndicator {
+    position: absolute;
+    left: 10px;
+    width: 6px;
+    height: 6px;
+    top: 50%;
+    margin-top: -3px;
+    border-radius: 50%;
+    background-color: $activeColor;
+  }
+  .ctrlIcons {
+    visibility: hidden;
+    display: flex;
+    align-items: center;
+    position: absolute;
+    right: 12px;
+    top: 0;
+    bottom: 0;
+
+    font-size: 12px;
+    transition: transform 0.3s ease;
+    :global(.fa) {
+      margin: auto 3px;
+      &:hover {
+        transform: scale(1.2);
+      }
+      &.active {
+        color: $activeColor !important;
+      }
+    }
+  }
+}
+
+.hostsView {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+.hostsMeta {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: $topZoneHeight;
+  text-align: center;
+  .hostsDesc {
+    display: inline-block;
+    margin: 0;
+    padding: 12px 0 6px;
+    font-size: 12px;
+    font-weight: lighter;
+    color: #aaa;
+  }
+}
+.hostsContent {
+  padding-top: $topZoneHeight;
+}
+
+/* editor */
+.editor {
+  display: block;
+  height: calc(100% - 186px);
+  overflow: auto;
+  background-color: #e0e0e0;
+}
+
+/* modal */
+.overlay {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  perspective: 600;
+  opacity: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+}
+.modalContent {
+  position: absolute;
+  top: 120px;
+  left: 80px;
+  right: 80px;
+  overflow: auto;
+  border-radius: 4px;
+  outline: none;
+  padding: 20px;
+  background: #eee;
+  box-shadow: 0 3px 16px rgba(0,0,0,0.35);
+  color: #333;
+}
+:global(.ReactModal__Overlay--after-open) {
+  opacity: 1;
+  transition: opacity 150ms ease-out;
+}
+:global(.ReactModal__Overlay--before-close) {
+  opacity: 0;
+}
+:global(.ReactModal__Content) {
+  transform: scale(0.6) translateY(-100px);
+}
+:global(.ReactModal__Content--after-open) {
+  transform: scale(1) translateY(0);
+  transition: all 150ms ease-in-out;
+}
+:global(.ReactModal__Content--before-close) {
+  -webkit-transform: scale(0.6) translateY(-100px);
+  transition: all 150ms ease-in-out;
+}
+.modalTitle {
+  font-size: 24px;
+  font-weight: lighter;
+  text-align: center;
+}
+.modalSubtitle {
+  font-size: 14px;
+  font-weight: lighter;
+  color: #999;
+}
+.modalBody {
+  display: flex;
+  flex-direction: column;
+}
+.modalClose {
+  position: absolute;
+  right: 12px;
+  top: 12px;
+  cursor: pointer;
+  font-size: 12px;
+}
+.ctrlItem {
+  flex: 1;
+  display: flex;
+  font-size: 14px;
+  color: #333;
+  padding: 12px 20px 0;
+}
+.ctrlItem input {
+  flex: 1;
+  padding-left: 4px;
+  align-self: center;
+  height: 24px;
+  margin: 0 8px;
+  border: none;
+  outline: none;
+  background: none;
+  border-bottom: 1px solid #999;
+  color: #333;
+  font-size: 14px;
+}
+.ctrlButton {
+  margin-top: 32px;
+}
+.btnAdd {
+  width: 120px;
+  margin: auto;
+  padding: 4px;
+  -webkit-appearance: none;
+  background-color: #fff;
+  outline: none;
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+  color: #333;
+  box-shadow: 0 0 1px rgba(0, 0, 0, 0.5);
+}

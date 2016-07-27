@@ -1,0 +1,32 @@
+.root {
+  font-family: 'source-code-pro', Menlo, 'Courier New', Consolas, monospace;
+  padding: 0;
+  line-height: 1.4;
+  width: 100%;
+  margin-top: 32px;
+  height: calc(100% - 32px);
+  overflow: auto;
+}
+
+.editor {
+  cursor: text;
+  font-size: 14px;
+  min-height: 100px;
+  padding: 12px 24px;
+  color: #1c84d2;
+  font-weight: lighter;
+}
+
+:global(.public-DraftEditorPlaceholder-inner) {
+  text-align: center;
+  color: #aaa;
+}
+
+.comment {
+  color: #aaa;
+}
+
+.enhance {
+  color: #999;
+  font-weight: bold;
+}

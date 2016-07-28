@@ -39,7 +39,7 @@ const installExtensions = async () => {
 };
 
 app.on('ready', async () => {
-  // await installExtensions();
+  await installExtensions();
 
   mainWindow = new BrowserWindow({
     show: false,

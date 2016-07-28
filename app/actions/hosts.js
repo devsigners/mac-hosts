@@ -2,6 +2,7 @@ import { writeHosts } from '../api/hosts'
 
 export const ADD_HOST = 'ADD_HOST'
 export const ACTIVATE_HOST = 'ACTIVATE_HOST'
+export const ACTIVATE_HOST_ERROR = 'ACTIVATE_HOST_ERROR'
 export const DEL_HOST = 'DEL_HOST'
 export const UPDATE_HOST = 'UPDATE_HOST'
 export const SELECT_HOST = 'SELECT_HOST'
@@ -14,15 +15,14 @@ export function add(hosts) {
 }
 
 export function activate(index, pwd) {
-  // return {
-  //   type: ACTIVATE_HOST,
-  //   index
-  // }
   return (dispatch, getState) => {
     const { hosts } = getState()
     writeHosts(hosts.list[index].content, (err) => {
       if (err) {
-        console.error(err)
+        dispatch({
+          type: ACTIVATE_HOST_ERROR,
+          message: err.toString()
+        })
       } else {
         dispatch({
           type: ACTIVATE_HOST,

@@ -1,6 +1,4 @@
 import React, { Component, PropTypes } from 'react'
-import { Link } from 'react-router'
-import { remote } from 'electron'
 import Modal from 'react-modal'
 import styles from './Home.scss'
 import Editor from './editor'
@@ -12,6 +10,7 @@ const getState = (props) => {
       res.selectedIndex = i
       return true
     }
+    return false
   })
   return res
 }
@@ -19,15 +18,14 @@ export default class Home extends Component {
   static propTypes = {
     add: PropTypes.func.isRequired,
     activate: PropTypes.func.isRequired,
-    select: PropTypes.func.isRequired
+    select: PropTypes.func.isRequired,
+    del: PropTypes.func.isRequired,
+    update: PropTypes.func.isRequired,
+    list: PropTypes.array.isRequired
   }
   constructor(props) {
     super(props)
     this.state = getState(props)
-  }
-  switch(index) {
-    if (index < 0 || index > this.props.list.length - 1) return
-    this.props.select(index)
   }
   openHostsModal() {
     this.setState({
@@ -76,7 +74,6 @@ export default class Home extends Component {
       e.preventDefault()
       e.stopPropagation()
     }
-    const hosts = this.props.list[index]
     if (!this._pwd) {
       return this.openPwdModal()
     }
@@ -89,6 +86,10 @@ export default class Home extends Component {
     this.closePwdModal()
     this.activateHosts(index)
   }
+  select(index) {
+    if (index < 0 || index > this.props.list.length - 1) return
+    this.props.select(index)
+  }
   _onContentChange(editorState) {
     this._editorState = editorState
   }
@@ -96,10 +97,9 @@ export default class Home extends Component {
     this.setState(getState(nextProps))
   }
   render() {
-    const { list, icons } = this.props
+    const { list } = this.props
     const index = this.state.selectedIndex
     const selectedHosts = list[index]
-    const listLen = list.length
     return (
       <div className={styles.container}>
         <div className={styles.leftZone}>
@@ -111,17 +111,23 @@ export default class Home extends Component {
             <ul className={styles.menuList}>
               {
                 list.map((item, i) => (
-                  <li key={i}
+                  <li
+                    key={i}
                     className={[styles.item, index === i ? styles.selected : ''].join(' ')}
-                    onClick={this.switch.bind(this, i)}>
+                    onClick={this.select.bind(this, i)}
+                  >
                     {
                       item.active ? (<span className={styles.activeIndicator}></span>) : ''
                     }
                     <span>{item.name}</span>
                     <div className={styles.ctrlIcons}>
                       <i
-                        className={["fa fa-check-circle", item.active ? styles.active : ''].join(' ')}
-                        onClick={this.activateHosts.bind(this, index)}></i>
+                        className={
+                          ['fa fa-check-circle', item.active ? styles.active : ''].join(' ')
+                        }
+                        onClick={this.activateHosts.bind(this, index)}
+                      >
+                      </i>
                       <i className="fa fa-trash-o" onClick={this.delHosts.bind(this, index)}></i>
                     </div>
                   </li>
@@ -129,8 +135,7 @@ export default class Home extends Component {
               }
             </ul>
             <div className={styles.extraCtrlZone}>
-              <span className={styles.ctrlButton}
-                onClick={this.openHostsModal.bind(this)}>
+              <span className={styles.ctrlButton} onClick={this.openHostsModal.bind(this)}>
                 <i className="fa fa-plus-circle"></i> 添加
               </span>
             </div>
@@ -145,7 +150,8 @@ export default class Home extends Component {
               <Editor
                 content={selectedHosts.content}
                 onChange={this._onContentChange.bind(this)}
-                onSave={this.saveHostsContent.bind(this, index)} />
+                onSave={this.saveHostsContent.bind(this, index)}
+              />
             ) : null
           }
         </div>
@@ -154,10 +160,12 @@ export default class Home extends Component {
           onRequestClose={this.closeHostsModal.bind(this)}
           overlayClassName={styles.overlay}
           className={styles.modalContent}
-          closeTimeoutMS={150}>
+          closeTimeoutMS={150}
+        >
           <span
             className={styles.modalClose}
-            onClick={this.closeHostsModal.bind(this)}>
+            onClick={this.closeHostsModal.bind(this)}
+          >
             ✕
           </span>
           <h1 className={styles.modalTitle}>Create new hosts file</h1>
@@ -166,12 +174,13 @@ export default class Home extends Component {
               <input placeholder="Name" ref="hostname" />
             </label>
             <label className={styles.ctrlItem}>
-              <input placeholder="Description" ref="hostdesc"/>
+              <input placeholder="Description" ref="hostdesc" />
             </label>
             <div className={[styles.ctrlItem, styles.ctrlButton].join(' ')}>
               <button
                 className={styles.btnAdd}
-                onClick={this.addHosts.bind(this)}>
+                onClick={this.addHosts.bind(this)}
+              >
                 Save
               </button>
             </div>
@@ -182,14 +191,18 @@ export default class Home extends Component {
           onRequestClose={this.closePwdModal.bind(this)}
           overlayClassName={styles.overlay}
           className={styles.modalContent}
-          closeTimeoutMS={150}>
+          closeTimeoutMS={150}
+        >
           <span
             className={styles.modalClose}
-            onClick={this.closePwdModal.bind(this)}>
+            onClick={this.closePwdModal.bind(this)}
+          >
             ✕
           </span>
           <h1 className={styles.modalTitle}>Input account password</h1>
-          <p className={styles.modalSubtitle}>Only used to write hosts file, and automatically deleted when app quits.</p>
+          <p className={styles.modalSubtitle}>
+            Only used to write hosts file, and automatically deleted when app quits.
+          </p>
           <div className={styles.modalBody}>
             <label className={styles.ctrlItem}>
               <input type="password" placeholder="password" ref="userpwd" />
@@ -197,7 +210,8 @@ export default class Home extends Component {
             <div className={[styles.ctrlItem, styles.ctrlButton].join(' ')}>
               <button
                 className={styles.btnAdd}
-                onClick={this.getPwdAndActivateHosts.bind(this, index)}>
+                onClick={this.getPwdAndActivateHosts.bind(this, index)}
+              >
                 Activate hosts
               </button>
             </div>

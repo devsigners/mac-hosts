@@ -1,8 +1,14 @@
-import { ADD_HOST, ACTIVATE_HOST, DEL_HOST, UPDATE_HOST, SELECT_HOST } from '../actions/hosts';
+import {
+  ADD_HOST,
+  ACTIVATE_HOST,
+  DEL_HOST,
+  UPDATE_HOST,
+  SELECT_HOST
+} from '../actions/hosts'
 
 const initialState = {}
 
-export default function hosts(state = initialState, action) {
+export default function hostsApp(state = initialState, action) {
   switch (action.type) {
     case ADD_HOST:
       return addHosts(state, action.hosts)
@@ -22,7 +28,7 @@ export default function hosts(state = initialState, action) {
 function activateHosts(state, index) {
   return Object.assign({}, state, {
     list: state.list.map((host, i) => {
-      host.active = i === index
+      host.active = i === index // eslint-disable-line
       return host
     })
   })
@@ -31,7 +37,7 @@ function activateHosts(state, index) {
 function selectHosts(state, index) {
   return Object.assign({}, state, {
     list: state.list.map((host, i) => {
-      host.selected = i === index
+      host.selected = i === index // eslint-disable-line
       return host
     })
   })
@@ -39,7 +45,7 @@ function selectHosts(state, index) {
 
 function addHosts(state, hosts) {
   if (!Array.isArray(hosts)) {
-    hosts = [hosts]
+    hosts = [hosts] // eslint-disable-line
   }
   const newList = []
   newList.push(...state.list, ...hosts)
@@ -50,9 +56,7 @@ function addHosts(state, hosts) {
 
 function delHosts(state, index) {
   return Object.assign({}, state, {
-    list: state.list.filter((host, i) => {
-      return i !== index
-    })
+    list: state.list.filter((host, i) => i !== index)
   })
 }
 

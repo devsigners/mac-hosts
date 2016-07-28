@@ -42,20 +42,17 @@ if (icon) {
 }
 
 const version = argv.version || argv.v;
-console.log('start ----> ', argv)
 if (version) {
   DEFAULT_OPTS.version = version;
   startPack();
 } else {
   // use the same version as the currently-installed electron-prebuilt
   exec('npm list electron-prebuilt --dev', (err, stdout) => {
-    console.log(err)
     if (err) {
       DEFAULT_OPTS.version = '1.2.0';
     } else {
       DEFAULT_OPTS.version = stdout.split('electron-prebuilt@')[1].replace(/\s/g, '');
     }
-    console.log('----->', DEFAULT_OPTS)
     startPack();
   });
 }
@@ -65,14 +62,16 @@ function build(cfg) {
   return new Promise((resolve, reject) => {
     webpack(cfg, (err, stats) => {
       if (err) return reject(err);
-      require('fs').writeFileSync('/tmp/reason', JSON.stringify(stats.toJson('verbose')), {encoding: 'utf8'})
+      require('fs').writeFileSync( // eslint-disable-line
+        '/tmp/reason',
+        JSON.stringify(stats.toJson('verbose')
+      ), { encoding: 'utf8' })
       resolve(stats);
     });
   });
 }
 
 function startPack() {
-  console.log('start pack...');
   build(electronCfg)
     .then(() => build(cfg))
     .then(() => del('release'))

@@ -26,5 +26,7 @@ $ npm run package
 
 Then you get `macHosts.app` in `release` dir.
 
+<img width="482" alt="2016-07-28 3 49 01" src="https://cloud.githubusercontent.com/assets/8046480/17204973/288ae2de-54db-11e6-9e32-e39e2e795804.png">
+
 
 *Note: requires a node version >= 4 and an npm version >= 2.*
